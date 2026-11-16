@@ -9,7 +9,7 @@ Depending on the task, you will need familiarity with the Linux command line, Gi
 Choose a host operating system supported by the exact tools you need. A Linux image running on the board does not determine which operating system every contributor must use.
 
 * **Editing documentation or source code:** Use your preferred editor and follow the repository's formatting settings.
-* **Building a Yocto image:** Follow the guide for that Yocto/BSP release, including its supported host distribution, packages, memory, and disk requirements. The [Yocto build guide is being developed in PR #1](https://github.com/kmutt-quantum-zcu104/documents/pull/1); it is not yet a complete recovery procedure.
+* **Building a Yocto image:** Follow the guide for that Yocto/BSP release, including its supported host distribution, packages, memory, and disk requirements. The [Yocto build guide is being developed in PR #1](https://github.com/qubitworks-lab/documents/pull/1); it is not yet a complete recovery procedure.
 * **Building PL designs:** Check the selected Vivado release's host requirements and the project's tested build procedure. Do not assume a newer tool version is interchangeable with the recorded one.
 * **Building applications:** Use the project's documented native or cross-compilation environment. With a compatible SDK, application development may not require rebuilding the whole board image.
 

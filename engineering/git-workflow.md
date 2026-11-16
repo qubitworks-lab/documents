@@ -1,12 +1,12 @@
-# Our Git workflow
+# Git workflow
 
-Our team uses Git and GitHub to coordinate, manage, and track the development of both hardware (RTL) and software across the KMUTT Quantum Hardware Testbed.
+Our team uses Git and GitHub to coordinate, manage, and track the development of hardware (RTL), software, and documentation across QubitWorks repositories.
 
 Hardware projects and embedded firmware generate files that are easy to commit accidentally, and source changes can conflict when people work in parallel. Team members come with different backgrounds in software and electrical engineering, but everyone should be able to contribute cleanly and safely.
 
 It is therefore important that we share an understanding of how these tools are used, so we can build together without stepping on each other's toes.
 
-This guide recommends a lightweight workflow. It does not establish organization-wide branch naming, merge policies, or GitHub protection settings; confirm repository-specific requirements before relying on them.
+This guide defines the shared Git contribution workflow for QubitWorks repositories. Individual repositories may add project-specific requirements, such as branch protection, required reviews, automated checks, or merge restrictions. Those requirements should be followed in addition to this guide.
 
 ## Required knowledge
 
@@ -53,13 +53,14 @@ git config --global push.default simple
 # Automatically set up tracking when pushing a new branch
 git config --global push.autoSetupRemote true
 
-# Use fast-forward when possible, otherwise merge during a plain git pull
-git config --global pull.ff true
-git config --global pull.rebase false
+# Prefer fast-forward-only pulls
+git config --global pull.ff only
 
 # Do not let Git convert line endings behind your back
 git config --global core.autocrlf false
 ```
+
+These are suggested defaults, not mandatory settings for every repository. The explicit options in the workflow commands below take precedence where provided.
 
 ### Avoiding line-ending confusion
 
@@ -73,7 +74,7 @@ Some Git for Windows installations enable `core.autocrlf`, which converts line e
 
 ## GitHub Flow
 
-Prefer a focused branch and pull request for collaborative changes. The examples assume the shared repository is named `origin` locally and its main branch is `main`. Replace quoted placeholders such as `'<your-branch-name>'` with your own values.
+QubitWorks uses a branch-and-pull-request workflow for collaborative changes. The examples assume the shared repository is named `origin` locally and its main branch is `main`. Replace quoted placeholders such as `'<your-branch-name>'` with your own values.
 
 Start with `git status`. Commit your current work on the appropriate branch or safely set it aside before switching branches; do not discard changes just to follow an example.
 
@@ -82,12 +83,12 @@ Start with `git status`. Commit your current work on the appropriate branch or s
 If you have write access to the repository, you can create a branch in it. Otherwise, use a fork and follow [GitHub's fork workflow](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks); its remotes differ from these examples. Organization membership alone does not guarantee write access.
 
 ```sh
-# Ensure you are on main and up to date
-git checkout main
-git pull --ff-only
+# Switch to main and update it from the remote
+git switch main
+git pull --ff-only origin main
 
 # Create and switch to your feature branch
-git checkout -b '<branch-type>/<short-description>'
+git switch -c '<branch-type>/<short-description>'
 ```
 
 `--ff-only` stops rather than creating a merge if your local `main` has diverged. If it fails, inspect the history and ask for help if needed; do not reset away local commits to make it succeed.
@@ -125,28 +126,44 @@ git commit -m '<commit message>'
 
 Prefer explicit staging over `git commit -a`: `-a` stages modifications and deletions of all tracked files, which may include unrelated work, and it does not add new untracked files.
 
-Write commit messages in English using [Conventional Commits](https://www.conventionalcommits.org/en), for example `feat(decoder): Add lookup table for distance 3` or `docs(board): Clarify serial console setup`. Keep the subject short and imperative. Add a body only when it explains something useful beyond the subject.
+Write commit messages in English using [Conventional Commits](https://www.conventionalcommits.org/en), for example `feat(decoder): add lookup table for distance 3` or `docs(board): clarify serial console setup`. Keep the subject short and imperative. Add a body only when it explains something useful beyond the subject.
 
-### Create a pull request
+### Sync main before pushing
 
-Keep pull requests as small and focused as possible. A PR that changes one module or adds one guide is much easier to review than a massive commit spanning half the semester.
-
-After committing your work, bring your branch up to date with `main`:
+Before pushing your feature branch or opening a pull request, update `main` and merge it into your feature branch. This keeps the branch up to date without rewriting its existing history.
 
 ```sh
-git checkout main
-git pull --ff-only
-git checkout '<your-branch-name>'
+# Update the remote-tracking information
+git fetch origin
+
+# Switch to main and update it
+git switch main
+git pull --ff-only origin main
+
+# Return to your feature branch
+git switch '<your-branch-name>'
+
+# Merge the latest main into your feature branch
 git merge main
 ```
 
-If there are conflicts, resolve them and review the result before continuing. Run the relevant checks, then push your branch:
+If there are conflicts, resolve them and review the result before continuing. Run the relevant checks after the merge.
+
+Do not push until the merge has completed successfully and the working tree has been checked.
+
+### Create a pull request
+
+Push your feature branch to GitHub:
 
 ```sh
 git push -u origin '<your-branch-name>'
 ```
 
+The `-u` option sets the upstream tracking branch when pushing a new branch for the first time. For subsequent pushes to the same branch, `git push` is sufficient.
+
 Open a pull request on GitHub. Keep the description brief: enough context for someone to understand the change, plus a related issue link if useful. For technical procedures, mention what you tested and any limitations. There is no rigid description template.
+
+Keep pull requests as small and focused as possible. A PR that changes one module or adds one guide is much easier to review than a massive commit spanning half the semester.
 
 ### Address review comments
 
@@ -158,7 +175,7 @@ Code reviews are collaborative check-ins, not tests.
 
 ### Merge your pull request
 
-Once the change is ready, address outstanding review concerns and check any validation results available for the repository. Do not assume every repository has automated checks or required approvals.
+Once the change is ready, address outstanding review concerns and check any validation results available for the repository. Follow the repository's required approvals and checks, if configured.
 
 * Generally, it is helpful for the author to merge, so they control when the change lands.
 * Choose a merge method agreed for the repository; this guide does not mandate one. If using squash merge, review the resulting commit message and keep it consistent with the commit convention.
@@ -170,8 +187,8 @@ After merging a pull request, delete its branch when it is no longer needed. Bef
 Cleaning up completed branches keeps it clear which work is active. Once you have confirmed this and deleted the remote branch on GitHub, clean up your local machine:
 
 ```sh
-git checkout main
-git pull --ff-only
+git switch main
+git pull --ff-only origin main
 git remote prune origin
 git branch -d '<your-branch-name>'
 ```
