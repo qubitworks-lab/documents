@@ -1,44 +1,47 @@
-# KMUTT Quantum Hardware documents
+# QubitWorks Documentation
 
-Shared documentation for research and engineering work using the quantum lab's ZCU104 at King Mongkut's University of Technology Thonburi (KMUTT).
-
-The board is shared across projects. We want current and future students to be able to understand the setup, reproduce useful work, and recover a documented working configuration without relying on the original authors being around.
+Shared documentation, engineering guidelines, and reusable practices for projects maintained by the QubitWorks organization.
 
 ## What's here
 
-This repository is for shareable board setup, build, recovery, and engineering guides. Documentation tied to a particular implementation should stay with its source code and be linked here when useful.
+This repository contains documentation intended to be shared across QubitWorks projects and repositories.
 
-A private `testbed-meta` repository is planned for lab-specific access information, current configuration records, and maintenance notes. See the [proposal in issue #3](https://github.com/kmutt-quantum-zcu104/documents/issues/3). Reusable procedures should live here rather than be duplicated in public and private guides.
+The documentation is organized by topic:
 
-This repository is public. Keep confidential lab information out of documents, logs, and screenshots. Passwords, tokens, and private keys do not belong in any Git repository, including a private one.
+- **Engineering** — Shared development environment recommendations, Git workflow, and engineering practices.
+- **Guides** — Reusable technical guides and procedures that may be useful across projects.
+
+Project-specific documentation should generally live alongside its relevant source code or in a dedicated repository. Hardware- and testbed-specific documentation should be maintained separately from organization-wide guidelines.
 
 ## Getting started
 
-The documentation is being built incrementally. The first guides are under review:
+Start with the engineering guidelines:
 
-* [Development environment and Git workflow — PR #2](https://github.com/kmutt-quantum-zcu104/documents/pull/2): Proposed development setup and collaboration practices.
-* [Yocto build guide — PR #1](https://github.com/kmutt-quantum-zcu104/documents/pull/1): Building a Linux image for the ZCU104.
+- [Development Environment](engineering/development-environment.md) — Development environment setup and recommendations.
+- [Git Workflow](engineering/git-workflow.md) — Shared Git contribution workflow for QubitWorks repositories.
 
-These are works in progress, not a complete onboarding or recovery procedure. Proposed standards are still being discussed. Check a guide's prerequisites, tested configuration, and limitations before following it; if something is missing or unclear, please ask.
+Additional technical guides are being developed and reviewed:
 
-The technology stack may change. Versions recorded for a tested procedure describe that setup, not a permanent requirement for every project.
+- [Yocto Build Guide — PR #1](https://github.com/qubitworks-lab/documents/pull/1)
+- [Ubuntu Overlay and Driver Guide — PR #5](https://github.com/qubitworks-lab/documents/pull/5)
 
-Before using or changing the shared board, coordinate with the other users and confirm the applicable lab safety requirements. Access, scheduling, and handover procedures are not documented here yet.
+Guides may have different prerequisites, tested configurations, and limitations. Check the relevant documentation before following a procedure.
 
-## Prerequisites and references
+## Documentation principles
 
-These guides focus on the testbed rather than teaching FPGA, Linux, or Git basics. Depending on the task, you will need familiarity with digital hardware and the Zynq processing system (PS) and programmable logic (PL), Linux command-line tools, or Git.
-
-Useful references:
-
-* [ZCU104 Evaluation Board User Guide (UG1267)](https://docs.amd.com/r/en-US/ug1267-zcu104-eval-bd): Board components, interfaces, and configuration reference.
-* [The Linux command line for beginners](https://ubuntu.com/tutorials/command-line-for-beginners): A starting point if you are unfamiliar with the shell.
-* [Pro Git](https://git-scm.com/book/en/v2): Git fundamentals; the first three chapters cover getting started, basic usage, and branching.
-
-Use the requirements and version-matched references for the particular guide or project you are working on. You do not need to install every tool just to read or contribute to the documentation.
+- Keep organization-wide guidelines in this repository.
+- Keep project-specific implementation details with their respective projects.
+- Avoid duplicating shared documentation across repositories; link to the canonical document instead.
+- Document tested configurations, prerequisites, and known limitations where applicable.
+- Keep confidential information out of public documentation, logs, and screenshots. Passwords, tokens, and private keys must never be committed to Git repositories, including private ones.
 
 ## Questions and contributions
 
-If something is unclear or broken, please [open an issue](https://github.com/kmutt-quantum-zcu104/documents/issues). Link the relevant guide and describe what you expected and what happened, including relevant versions or errors when useful. Remove sensitive information before posting.
+If something is unclear, outdated, or broken, please [open an issue](https://github.com/qubitworks-lab/documents/issues).
 
-Small corrections and focused pull requests are welcome. For larger changes, discuss the idea in an issue first so we can avoid duplicating work. Keep descriptions brief; for technical procedures, explain what was tested and what remains unverified. If a decision is made outside GitHub, leave a short summary on the relevant issue or pull request.
+For documentation changes:
+
+- Small corrections and focused pull requests are welcome.
+- Discuss larger changes in an issue first to avoid duplicated work.
+- For technical procedures, describe what was tested and what remains unverified.
+- If a decision is made outside GitHub, summarize it in the relevant issue or pull request.
